@@ -15,7 +15,7 @@ public abstract class ColumnAdapter<Data> extends BaseAdapter {
 
     private List<Data> mDataList;
 
-    public ColumnAdapter(List<Data> dataList) {
+    ColumnAdapter(List<Data> dataList) {
         mDataList = dataList;
     }
 

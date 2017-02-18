@@ -26,11 +26,14 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
     private Mapper<T> mMapper;
 
     private SparseArray<List<T>> mData;
-    private List<ListView> mListView;
+    private List<ListView> mListViewList;
 
     private OnSelected<T> mOnSelected;
     private OnAdapterProvide<T> mOnAdapterProvide;
+    private List<OnAdapterProvide<T>> mOnAdapterProvideList;
+
     private int mDivisionColour;
+    private int mPageCount;
 
     public MultiColumnsPicker(Context context) {
         super(context);
@@ -64,55 +67,48 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
         }
     }
 
+    /**
+     * 设置分割线颜色(也可通过multicolomns_divisionColour设置)
+     *
+     * @param colour 分割线颜色
+     */
     public void setDivisionColour(int colour) {
         mDivisionColour = colour;
     }
 
+    /**
+     * 设置页数(也可通过multicolomns_pageCount设置)
+     *
+     * @param count 总页数
+     */
     public void setPageCount(int count) {
         if (mData == null) {
+            mPageCount = count;
             mData = new SparseArray<>(count);
-            initView(count);
-        }
-    }
-
-    private void initView(int count) {
-        mListView = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            final ListView listView = new ListView(getContext());
-            listView.setLayoutParams(
-                    new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-            addDivisionView(count, i);
-            addView(listView);
-            mListView.add(listView);
-        }
-    }
-
-    private void addDivisionView(int count, int position) {
-        if (mDivisionColour == 0) {
-            return;
-        }
-        final View divisionView = new View(getContext());
-        divisionView.setLayoutParams(
-                new LayoutParams(UiUtil.dip2px(getContext(), 1), ViewGroup.LayoutParams.MATCH_PARENT));
-        divisionView.setBackgroundColor(mDivisionColour);
-        if (position != 0 && position != count) {
-            addView(divisionView);
+            initView();
         }
     }
 
     /**
-     * 配置监听器
+     * 设置选中,显示内容的字段
+     *
+     * @param mapper 映射器
      */
-    public void setOnSelected(OnSelected<T> onSelected) {
-        mOnSelected = onSelected;
-    }
-
     public void setMapper(Mapper<T> mapper) {
         mMapper = mapper;
     }
 
     /**
-     * 配置适配器
+     * 设置选择监听器
+     *
+     * @param onSelected 中项的回调
+     */
+    public void setOnSelected(OnSelected<T> onSelected) {
+        mOnSelected = onSelected;
+    }
+
+    /**
+     * 配置自定义适配器
      *
      * @param onAdapterProvide 适配器回调
      */
@@ -121,51 +117,35 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
     }
 
     /**
-     * 配置某页的适配器
+     * 配置某页的自定义适配器
      *
      * @param page             页数
      * @param onAdapterProvide 适配器回调
      */
     public void setAdapter(int page, OnAdapterProvide<T> onAdapterProvide) {
-        // TODO: 2017/2/18
+        if (mOnAdapterProvideList == null) {
+            mOnAdapterProvideList = new ArrayList<>(mPageCount);
+        }
+        if (mOnAdapterProvideList.size() == 0) {
+            for (int i = 0; i < mPageCount; i++) {
+                mOnAdapterProvideList.add(null);
+            }
+        }
+        mOnAdapterProvideList.add(page, onAdapterProvide);
     }
 
     /**
-     * 设置内容
+     * 设置显示内容
+     *
+     * @param page 需要显示的页
+     * @param data 内容
      */
     public void setContent(final int page, final List<T> data) {
-        if (mData == null) {
-            throw new InstantiationError("没有设置总页数");
-        }
-        if (mMapper == null) {
-            throw new InstantiationError("没有设置Mapper");
-        }
-        if (page >= getChildCount()) {
-            throw new ArrayIndexOutOfBoundsException("设置内容页大于总页数");
-        }
+        checkConfig(page);
+
         mData.put(page, data);
 
-        final ListView listView = mListView.get(page);
-
-        final ColumnAdapter adapter;
-        if (mOnAdapterProvide != null) {
-            adapter = mOnAdapterProvide.provideAdapter(this, data);
-        } else {
-            adapter = new SimpleColumnAdapter<>(data, MultiColumnsPicker.this);
-        }
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                for (T t : data) {
-                    setChecked(t, false);
-                }
-                setChecked(data.get(position), true);
-                mOnSelected.onSelected(page, data.get(position));
-                adapter.notifyDataSetChanged();
-            }
-        });
+        initializeListView(page, data);
     }
 
     @Override
@@ -185,6 +165,71 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
 
     public interface OnAdapterProvide<V> {
         ColumnAdapter<V> provideAdapter(Mapper<V> mapper, List<V> data);
+    }
+
+    private void initView() {
+        mListViewList = new ArrayList<>(mPageCount);
+        for (int i = 0; i < mPageCount; i++) {
+            final ListView listView = new ListView(getContext());
+            listView.setLayoutParams(
+                    new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            addDivisionView(mPageCount, i);
+            addView(listView);
+            mListViewList.add(listView);
+        }
+    }
+
+    private void addDivisionView(int count, int position) {
+        if (mDivisionColour == 0) {
+            return;
+        }
+        final View divisionView = new View(getContext());
+        divisionView.setLayoutParams(
+                new LayoutParams(UiUtil.dip2px(getContext(), 1), ViewGroup.LayoutParams.MATCH_PARENT));
+        divisionView.setBackgroundColor(mDivisionColour);
+        if (position != 0 && position != count) {
+            addView(divisionView);
+        }
+    }
+
+    private void initializeListView(final int page, final List<T> data) {
+        final ListView listView = mListViewList.get(page);
+
+        final ColumnAdapter adapter;
+
+        if (mOnAdapterProvideList != null && mOnAdapterProvideList.get(page) != null) {
+            adapter = mOnAdapterProvideList.get(page).provideAdapter(this, data);
+        } else if (mOnAdapterProvide != null) {
+            adapter = mOnAdapterProvide.provideAdapter(this, data);
+        } else {
+            adapter = new SimpleColumnAdapter<>(data, MultiColumnsPicker.this);
+        }
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                for (T t : data) {
+                    setChecked(t, false);
+                }
+                setChecked(data.get(position), true);
+                mOnSelected.onSelected(page, data.get(position));
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void checkConfig(int page) {
+        if (mData == null) {
+            throw new InstantiationError("没有设置总页数");
+        }
+        if (mMapper == null) {
+            throw new InstantiationError("没有设置Mapper");
+        }
+        if (page >= getChildCount()) {
+            throw new ArrayIndexOutOfBoundsException("设置内容页大于总页数");
+        }
     }
 
 }

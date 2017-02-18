@@ -8,9 +8,9 @@ import cn.yzapp.multicolumnspickerlib.Mapper;
  * Created by Nestor on 2/17/17.
  */
 public abstract class AbsColumnAdapter<Data> extends ColumnAdapter<Data> {
-    private final Mapper mMapper;
+    final Mapper<Data> mMapper;
 
-    public AbsColumnAdapter(List<Data> dataList, Mapper mapper) {
+    protected AbsColumnAdapter(List<Data> dataList, Mapper<Data> mapper) {
         super(dataList);
         mMapper = mapper;
     }

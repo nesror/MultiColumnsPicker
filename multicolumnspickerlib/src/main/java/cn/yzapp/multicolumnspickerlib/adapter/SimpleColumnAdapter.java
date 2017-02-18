@@ -12,15 +12,11 @@ import cn.yzapp.multicolumnspickerlib.Mapper;
 /**
  * Created by Nestor on 2/17/17.
  */
-public class SimpleColumnAdapter<Data> extends ColumnAdapter<Data> {
-
-    private Mapper<Data> mMapper;
+public class SimpleColumnAdapter<Data> extends AbsColumnAdapter<Data> {
 
     public SimpleColumnAdapter(List<Data> dataList, Mapper<Data> mapper) {
-        super(dataList);
-        mMapper = mapper;
+        super(dataList, mapper);
     }
-
 
     @Override
     protected void initView(int position, View convertView, ViewGroup parent) {

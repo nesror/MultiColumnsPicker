@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.yzapp.multicolumnspickerlib.MultiColumnsPicker;
+import cn.yzapp.multicolumnspickerlib.adapter.ColumnAdapter;
 import cn.yzapp.multicolumnspickerlib.listener.OnSelected;
 import cn.yzapp.multicolumnspickerlib.Mapper;
 
@@ -33,6 +34,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        mCityColumnSicker.setAdapter(1, new MultiColumnsPicker.OnAdapterProvide<City>() {
+            @Override
+            public ColumnAdapter<City> provideAdapter(Mapper<City> mapper, List<City> data) {
+                return new CityAdapter<>(data, mapper);
+            }
+        });
         mCityColumnSicker.setMapper(new Mapper<City>() {
             @Override
             public String getString(City city) {
