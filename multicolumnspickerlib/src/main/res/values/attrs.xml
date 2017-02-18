@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="multicolomns_attrs">
+        <attr name="multicolomns_divisionColour" format="color" />
+        <attr name="multicolomns_pageCount" format="integer" />
+    </declare-styleable>
+</resources>

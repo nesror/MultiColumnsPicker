@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        mCityColumnSicker.setDivisionColour(0xff666666);
         mCityColumnSicker.setPageCount(2);
         mCityColumnSicker.setMapper(new Mapper<City>() {
             @Override

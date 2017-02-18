@@ -1,6 +1,7 @@
 package cn.yzapp.multicolumnspickerlib;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.yzapp.multicolumnspickerlib.adapter.ColumnAdapter;
@@ -24,9 +26,11 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
     private Mapper<T> mMapper;
 
     private SparseArray<List<T>> mData;
+    private List<ListView> mListView;
 
     private OnSelected<T> mOnSelected;
     private OnAdapterProvide<T> mOnAdapterProvide;
+    private int mDivisionColour;
 
     public MultiColumnsPicker(Context context) {
         super(context);
@@ -34,27 +38,65 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
 
     public MultiColumnsPicker(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setAttrs(context, attrs);
     }
 
     public MultiColumnsPicker(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setAttrs(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public MultiColumnsPicker(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        setAttrs(context, attrs);
+    }
+
+    private void setAttrs(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.multicolomns_attrs, 0, 0);
+        try {
+            int divisionColour = typedArray.getColor(R.styleable.multicolomns_attrs_multicolomns_divisionColour, 0);
+            setDivisionColour(divisionColour);
+            int pageCount = typedArray.getInt(R.styleable.multicolomns_attrs_multicolomns_pageCount, 1);
+            //setPageCount(pageCount);
+        } finally {
+            typedArray.recycle();
+        }
+    }
+
+    public void setDivisionColour(int colour) {
+        mDivisionColour = colour;
     }
 
     public void setPageCount(int count) {
         mData = new SparseArray<>(count);
 
-        for (int i = count; i > 0; i--) {
+        initView(count);
+    }
+
+    private void initView(int count) {
+        mListView = new ArrayList<>(count);
+        for (int i = 0; i < count; i++) {
             final ListView listView = new ListView(getContext());
             listView.setLayoutParams(
-                    new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                    new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            addDivisionView(count, i);
             addView(listView);
+            mListView.add(listView);
         }
+    }
 
+    private void addDivisionView(int count, int position) {
+        if (mDivisionColour == 0) {
+            return;
+        }
+        final View divisionView = new View(getContext());
+        divisionView.setLayoutParams(
+                new LayoutParams(UiUtil.dip2px(getContext(), 1), ViewGroup.LayoutParams.MATCH_PARENT));
+        divisionView.setBackgroundColor(mDivisionColour);
+        if (position != 0 && position != count) {
+            addView(divisionView);
+        }
     }
 
     /**
@@ -102,7 +144,7 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
         }
         mData.put(page, data);
 
-        final ListView listView = (ListView) getChildAt(page);
+        final ListView listView = mListView.get(page);
 
         final ColumnAdapter adapter;
         if (mOnAdapterProvide != null) {
