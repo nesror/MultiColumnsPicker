@@ -58,7 +58,7 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
             int divisionColour = typedArray.getColor(R.styleable.multicolomns_attrs_multicolomns_divisionColour, 0);
             setDivisionColour(divisionColour);
             int pageCount = typedArray.getInt(R.styleable.multicolomns_attrs_multicolomns_pageCount, 1);
-            //setPageCount(pageCount);
+            setPageCount(pageCount);
         } finally {
             typedArray.recycle();
         }
@@ -69,9 +69,10 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
     }
 
     public void setPageCount(int count) {
-        mData = new SparseArray<>(count);
-
-        initView(count);
+        if (mData == null) {
+            mData = new SparseArray<>(count);
+            initView(count);
+        }
     }
 
     private void initView(int count) {

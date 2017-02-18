@@ -27,7 +27,7 @@ public class SimpleColumnAdapter<Data> extends ColumnAdapter<Data> {
         TextView textView = (TextView) convertView.findViewById(R.id.text);
         textView.setText(showString(getItem(position)));
         if(isChecked(getItem(position))){
-            textView.setBackgroundColor(0xff999999);
+            textView.setBackgroundColor(0xffdddddd);
         }else{
             textView.setBackgroundColor(0xffffffff);
         }
