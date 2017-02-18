@@ -95,7 +95,7 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
             throw new InstantiationError("没有设置总页数");
         }
         if (mMapper == null) {
-            throw new InstantiationError("没有设置显示内容");
+            throw new InstantiationError("没有设置Mapper");
         }
         if (page >= getChildCount()) {
             throw new ArrayIndexOutOfBoundsException("设置内容页大于总页数");
@@ -103,7 +103,6 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
         mData.put(page, data);
 
         final ListView listView = (ListView) getChildAt(page);
-
 
         final ColumnAdapter adapter;
         if (mOnAdapterProvide != null) {
@@ -128,23 +127,17 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
 
     @Override
     public String getString(T t) {
-        if (mMapper == null) {
-            throw new InstantiationError("没有设置显示内容");
-        }
         return mMapper.getString(t);
     }
 
     @Override
     public boolean isChecked(T t) {
-        if (mMapper == null) {
-            throw new InstantiationError("没有设置显示内容");
-        }
         return mMapper.isChecked(t);
     }
 
     @Override
-    public void setChecked(T t, boolean isChecked) {
-
+    public void setChecked(T t, boolean checked) {
+        mMapper.setChecked(t, checked);
     }
 
     public interface OnAdapterProvide<V> {

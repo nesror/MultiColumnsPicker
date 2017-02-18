@@ -54,17 +54,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSelected(int page, City chooseCity) {
                 if (page == 0) {
-                    for (City city : province) {
-                        city.checked = false;
-                    }
-                    chooseCity.checked = true;
                     List<City> city = new ArrayList<>();
                     for (int i = 0; i < 100; i++) {
                         city.add(new City(i, chooseCity.cityName + "市" + i));
                     }
                     mCityColumnSicker.setContent(1, city);
-                }else{
-                    chooseCity.checked = !chooseCity.checked;
                 }
             }
         });
