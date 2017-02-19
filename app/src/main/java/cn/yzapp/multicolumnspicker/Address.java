@@ -6,6 +6,7 @@ package cn.yzapp.multicolumnspicker;
 public class Address {
     public static final int PROVINCE = 0;
     public static final int CITY = 1;
+    public static final int AREA = 2;
 
     int id;
     String name;

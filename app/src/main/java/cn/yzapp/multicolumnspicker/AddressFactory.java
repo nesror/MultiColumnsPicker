@@ -9,6 +9,7 @@ import java.util.List;
 public class AddressFactory {
     private static List<Address> mProvinceList;
     private static List<Address> mCityList;
+    private static List<Address> mAreaList;
 
     public static List<Address> getAddressList(int type) {
         switch (type) {
@@ -17,6 +18,8 @@ public class AddressFactory {
                 return getProvinceList();
             case Address.CITY:
                 return getCityList();
+            case Address.AREA:
+                return getAreaList();
         }
 
     }
@@ -46,5 +49,20 @@ public class AddressFactory {
         return mCityList;
     }
 
+    private static List<Address> getAreaList() {
+        String checkedCityName = "";
+        for (Address address : mCityList) {
+            if (address.checked) {
+                checkedCityName = address.name;
+                break;
+            }
+        }
+        mAreaList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            mAreaList.add(new Address(i, checkedCityName + "区" + i));
+        }
+        mAreaList.get(0).checked = true;
+        return mAreaList;
+    }
 
 }
