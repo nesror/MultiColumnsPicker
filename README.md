@@ -16,22 +16,20 @@ Step 2. Add the dependency
 	compile 'com.github.nesror:MultiColumnsPicker:[look jitpack]@aar'
 ```
 
-Use
-----------------------------
-* 布局文件
-````{xml}
-    <cn.yzapp.multicolumnspickerlib.MultiColumnsPicker
-        android:id="@+id/city_columns_picker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:multicolomns_divisionColour="@color/colorAccent"
-        app:multicolomns_pageCount="3" />
-````
-
 简单使用
 ----------------------------
- 1. 设置映射器
+1. 布局文件
+    ````{xml}
+        <cn.yzapp.multicolumnspickerlib.MultiColumnsPicker
+            android:id="@+id/city_columns_picker"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:multicolomns_divisionColour="@color/colorAccent"
+            app:multicolomns_pageCount="3" />
+    ````
+
+1. 设置映射器
     ```{java}
     /**
      * 设置选中,显示内容的字段
@@ -40,7 +38,8 @@ Use
      */
     public void setMapper(Mapper<T> mapper)
     ```
-2. 设置监听
+
+1. 设置监听
     ```{java}
     /**
      * 设置选择监听器
@@ -49,7 +48,8 @@ Use
      */
     public void setOnSelected(OnSelected<T> onSelected) 
     ```
- 3. 设置内容
+
+1. 设置内容
     ```{java}
     /**
      * 设置显示内容
@@ -59,4 +59,5 @@ Use
      */
     public void setContent(final int page, final List<T> data) 
     ```
+
 更多设置请见demo
