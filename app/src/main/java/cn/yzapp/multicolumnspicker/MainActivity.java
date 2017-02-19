@@ -3,7 +3,6 @@ package cn.yzapp.multicolumnspicker;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.yzapp.multicolumnspickerlib.MultiColumnsPicker;
@@ -25,10 +24,10 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         mCityColumnSicker = (MultiColumnsPicker) findViewById(R.id.city_columns_picker);
 
-        mCityColumnSicker.setAdapter(1, new MultiColumnsPicker.OnAdapterProvide<Address>() {
+        mCityColumnSicker.setAdapter(Address.CITY, new MultiColumnsPicker.OnAdapterProvide<Address>() {
             @Override
             public ColumnAdapter<Address> provideAdapter(Mapper<Address> mapper, List<Address> data) {
-                return new AddressAdapter<>(data, mapper);
+                return new CityAdapter<>(data, mapper);
             }
         });
         mCityColumnSicker.setMapper(new Mapper<Address>() {
@@ -58,5 +57,6 @@ public class MainActivity extends AppCompatActivity {
         mCityColumnSicker.setContent(Address.PROVINCE, AddressFactory.getAddressList(Address.PROVINCE));
 
         mCityColumnSicker.setContent(Address.CITY, AddressFactory.getAddressList(Address.CITY));
+
     }
 }

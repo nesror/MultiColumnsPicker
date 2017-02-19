@@ -12,8 +12,8 @@ import cn.yzapp.multicolumnspickerlib.adapter.AbsColumnAdapter;
 /**
  * Created by Nestor on 2/17/18.
  */
-public class AddressAdapter<Data> extends AbsColumnAdapter<Data> {
-    AddressAdapter(List<Data> list, Mapper<Data> mapper) {
+public class CityAdapter<Data> extends AbsColumnAdapter<Data> {
+    CityAdapter(List<Data> list, Mapper<Data> mapper) {
         super(R.layout.city_item, list, mapper);
     }
 

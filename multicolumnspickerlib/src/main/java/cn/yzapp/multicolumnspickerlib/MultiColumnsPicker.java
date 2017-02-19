@@ -171,8 +171,14 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
         mListViewList = new ArrayList<>(mPageCount);
         for (int i = 0; i < mPageCount; i++) {
             final ListView listView = new ListView(getContext());
-            listView.setLayoutParams(
-                    new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            if (getOrientation() == HORIZONTAL) {
+                listView.setLayoutParams(
+                        new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            } else {
+                listView.setLayoutParams(
+                        new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0, 1));
+            }
+            listView.setDivider(null);
             addDivisionView(mPageCount, i);
             addView(listView);
             mListViewList.add(listView);
@@ -184,8 +190,13 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
             return;
         }
         final View divisionView = new View(getContext());
-        divisionView.setLayoutParams(
-                new LayoutParams(UiUtil.dip2px(getContext(), 1), ViewGroup.LayoutParams.MATCH_PARENT));
+        if (getOrientation() == HORIZONTAL) {
+            divisionView.setLayoutParams(
+                    new LayoutParams(UiUtil.dip2px(getContext(), 1), ViewGroup.LayoutParams.MATCH_PARENT));
+        } else {
+            divisionView.setLayoutParams(
+                    new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiUtil.dip2px(getContext(), 1)));
+        }
         divisionView.setBackgroundColor(mDivisionColour);
         if (position != 0 && position != count) {
             addView(divisionView);

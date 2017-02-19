@@ -20,7 +20,7 @@
         android:id="@+id/city_columns_picker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:multicolomns_divisionColour="@color/colorPrimary"
+        android:orientation="vertical"
+        app:multicolomns_divisionColour="@color/colorAccent"
         app:multicolomns_pageCount="2" />
 </RelativeLayout>
