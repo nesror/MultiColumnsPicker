@@ -13,7 +13,7 @@ import cn.yzapp.multicolumnspickerlib.Mapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MultiColumnsPicker<City> mCityColumnSicker;
+    private MultiColumnsPicker<Address> mCityColumnSicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,55 +25,38 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         mCityColumnSicker = (MultiColumnsPicker) findViewById(R.id.city_columns_picker);
 
-        final List<City> province = new ArrayList<>();
-
-        for (int i = 0; i < 100; i++) {
-            province.add(new City(i, "省" + i));
-            if (i == 5) {
-                province.get(i).checked = true;
-            }
-        }
-
-        mCityColumnSicker.setAdapter(1, new MultiColumnsPicker.OnAdapterProvide<City>() {
+        mCityColumnSicker.setAdapter(1, new MultiColumnsPicker.OnAdapterProvide<Address>() {
             @Override
-            public ColumnAdapter<City> provideAdapter(Mapper<City> mapper, List<City> data) {
-                return new CityAdapter<>(data, mapper);
+            public ColumnAdapter<Address> provideAdapter(Mapper<Address> mapper, List<Address> data) {
+                return new AddressAdapter<>(data, mapper);
             }
         });
-        mCityColumnSicker.setMapper(new Mapper<City>() {
+        mCityColumnSicker.setMapper(new Mapper<Address>() {
             @Override
-            public String getString(City city) {
-                return city.cityName;
+            public String getString(Address address) {
+                return address.name;
             }
 
             @Override
-            public boolean isChecked(City city) {
-                return city.checked;
+            public boolean isChecked(Address address) {
+                return address.checked;
             }
 
             @Override
-            public void setChecked(City city, boolean checked) {
-                city.checked = checked;
+            public void setChecked(Address address, boolean checked) {
+                address.checked = checked;
             }
         });
-        mCityColumnSicker.setOnSelected(new OnSelected<City>() {
+        mCityColumnSicker.setOnSelected(new OnSelected<Address>() {
             @Override
-            public void onSelected(int page, City chooseCity) {
-                if (page == 0) {
-                    List<City> city = new ArrayList<>();
-                    for (int i = 0; i < 100; i++) {
-                        city.add(new City(i, chooseCity.cityName + "市" + i));
-                    }
-                    mCityColumnSicker.setContent(1, city);
+            public void onSelected(int page, Address chooseAddress) {
+                if (page == Address.PROVINCE) {
+                    mCityColumnSicker.setContent(Address.CITY, AddressFactory.getAddressList(Address.CITY));
                 }
             }
         });
-        mCityColumnSicker.setContent(0, province);
+        mCityColumnSicker.setContent(Address.PROVINCE, AddressFactory.getAddressList(Address.PROVINCE));
 
-        List<City> city = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            city.add(new City(i, province.get(5).cityName + "市" + i));
-        }
-        mCityColumnSicker.setContent(1, city);
+        mCityColumnSicker.setContent(Address.CITY, AddressFactory.getAddressList(Address.CITY));
     }
 }

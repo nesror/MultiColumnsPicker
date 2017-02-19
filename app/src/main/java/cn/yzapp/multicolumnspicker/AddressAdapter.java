@@ -12,9 +12,9 @@ import cn.yzapp.multicolumnspickerlib.adapter.AbsColumnAdapter;
 /**
  * Created by Nestor on 2/17/18.
  */
-public class CityAdapter<Data> extends AbsColumnAdapter<Data> {
-    CityAdapter(List<Data> list, Mapper<Data> mapper) {
-        super(list, mapper);
+public class AddressAdapter<Data> extends AbsColumnAdapter<Data> {
+    AddressAdapter(List<Data> list, Mapper<Data> mapper) {
+        super(R.layout.city_item, list, mapper);
     }
 
     @Override
@@ -26,10 +26,5 @@ public class CityAdapter<Data> extends AbsColumnAdapter<Data> {
         } else {
             textView.setBackgroundColor(0xffffffff);
         }
-    }
-
-    @Override
-    public int provideItemLayout() {
-        return R.layout.city_item;
     }
 }

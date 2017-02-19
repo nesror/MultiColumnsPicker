@@ -1,5 +1,7 @@
 package cn.yzapp.multicolumnspickerlib.adapter;
 
+import android.support.annotation.LayoutRes;
+
 import java.util.List;
 
 import cn.yzapp.multicolumnspickerlib.Mapper;
@@ -10,8 +12,8 @@ import cn.yzapp.multicolumnspickerlib.Mapper;
 public abstract class AbsColumnAdapter<Data> extends ColumnAdapter<Data> {
     final Mapper<Data> mMapper;
 
-    protected AbsColumnAdapter(List<Data> dataList, Mapper<Data> mapper) {
-        super(dataList);
+    protected AbsColumnAdapter(@LayoutRes int layoutRes, List<Data> dataList, Mapper<Data> mapper) {
+        super(layoutRes, dataList);
         mMapper = mapper;
     }
 

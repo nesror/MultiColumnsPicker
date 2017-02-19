@@ -15,16 +15,16 @@ import cn.yzapp.multicolumnspickerlib.Mapper;
 public class SimpleColumnAdapter<Data> extends AbsColumnAdapter<Data> {
 
     public SimpleColumnAdapter(List<Data> dataList, Mapper<Data> mapper) {
-        super(dataList, mapper);
+        super(R.layout.multicolomns_item, dataList, mapper);
     }
 
     @Override
     protected void initView(int position, View convertView, ViewGroup parent) {
         TextView textView = (TextView) convertView.findViewById(R.id.text);
         textView.setText(showString(getItem(position)));
-        if(isChecked(getItem(position))){
+        if (isChecked(getItem(position))) {
             textView.setBackgroundColor(0xffdddddd);
-        }else{
+        } else {
             textView.setBackgroundColor(0xffffffff);
         }
     }
@@ -37,10 +37,5 @@ public class SimpleColumnAdapter<Data> extends AbsColumnAdapter<Data> {
     @Override
     public boolean isChecked(Data data) {
         return mMapper.isChecked(data);
-    }
-
-    @Override
-    public int provideItemLayout() {
-        return R.layout.multicolomns_item;
     }
 }
