@@ -229,6 +229,13 @@ public class MultiColumnsPicker<T> extends LinearLayout implements Mapper<T> {
                 adapter.notifyDataSetChanged();
             }
         });
+        for (int i = 0; i < data.size(); i++) {
+            if (isChecked(data.get(i))) {
+                listView.setSelection(i);
+                break;
+            }
+        }
+
     }
 
     private void checkConfig(int page) {
