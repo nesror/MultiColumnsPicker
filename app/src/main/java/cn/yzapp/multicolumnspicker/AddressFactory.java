@@ -29,7 +29,7 @@ public class AddressFactory {
         for (int i = 0; i < 100; i++) {
             mProvinceList.add(new Address(i, "省" + i));
         }
-        mProvinceList.get(0).checked = true;
+        mProvinceList.get(50).checked = true;
         return mProvinceList;
     }
 
@@ -45,7 +45,7 @@ public class AddressFactory {
         for (int i = 0; i < 100; i++) {
             mCityList.add(new Address(i, checkedProvinceName + "市" + i));
         }
-        mCityList.get(0).checked = true;
+        mCityList.get(50).checked = true;
         return mCityList;
     }
 
@@ -61,7 +61,7 @@ public class AddressFactory {
         for (int i = 0; i < 100; i++) {
             mAreaList.add(new Address(i, checkedCityName + "区" + i));
         }
-        mAreaList.get(0).checked = true;
+        mAreaList.get(50).checked = true;
         return mAreaList;
     }
 
