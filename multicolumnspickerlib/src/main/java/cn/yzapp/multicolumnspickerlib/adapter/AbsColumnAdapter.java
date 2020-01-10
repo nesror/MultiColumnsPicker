@@ -1,6 +1,6 @@
 package cn.yzapp.multicolumnspickerlib.adapter;
 
-import android.support.annotation.LayoutRes;
+import androidx.annotation.LayoutRes;
 
 import java.util.List;
 
